@@ -3,6 +3,8 @@ package com.produtos.apirest.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.cache.annotation.CacheEvict;
+// import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,40 +21,49 @@ import com.produtos.apirest.repository.ProdutoRepository;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/api")
-// @Api(value = "API REST Produtos")
 public class ProdutoResource {
     
     @Autowired
     ProdutoRepository produtoRepository;
 
-    // @ApiOperation(value = "Retorna uma lista de produtos")
+
     @GetMapping("/produtos")
+    // @Cacheable("produtos")
     public List<Produto> listaProdutos(){
+        System.out.println("Called listaProdutos route");
         return produtoRepository.findAll();
     }
 
-    // @ApiOperation(value = "Retorna um produto de acordo com o Id passado")
     @GetMapping("/produtos/{id}")
+    // @Cacheable("produtos")
     public Produto listaProdutos_ById(@PathVariable(value = "id") long id){
+        System.out.println("Called listaProdutos_ById route");
         return produtoRepository.findById(id);
     }
 
-    // @ApiOperation(value = "Salva um novo produto no banco")
     @PostMapping("/produtos")
     public Produto salvaProduto(@RequestBody Produto produto){
+        System.out.println("Called salvaProduto route");
         return produtoRepository.save(produto);
     }
 
-    // @ApiOperation(value = "Deleta o produto passado como parâmetro")
     @DeleteMapping("/produtos")
     public void deleteProduto(@RequestBody Produto produto){
+        System.out.println("Called deleteProduto route");
         produtoRepository.delete(produto);
 
     }
 
-    // @ApiOperation(value = "Atualiza o produto passado como parâmetro")
     @PutMapping("/produtos")
     public Produto updateProduto(@RequestBody Produto produto){
+        System.out.println("Called updateProduto route");
         return produtoRepository.save(produto);
     }
+
+    // @GetMapping("produtos/clear-cache")
+    // @CacheEvict("produtos*")
+    // public void clearCache(){
+    //     System.out.println("Called clearCache route");
+    //     return;
+    // }
 }
